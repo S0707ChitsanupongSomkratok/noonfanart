@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Noon Fan Art</title>
+    <link href="https://fonts.googleapis.com" rel="stylesheet">
+    <style>
+        :root {
+            --primary-pink: #ff7eb3;
+            --secondary-pink: #ff758c;
+            --soft-white: rgba(255, 255, 255, 0.85);
+        }
+
+        body {
+            font-family: 'Mali', cursive;
+            background: linear-gradient(180deg, #ff9a9e 0%, #fecfef 100%);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden; /* กันสกอลบาร์เวลาหัวใจลอย */
+            color: #4a4a4a;
+        }
+
+        /* พื้นหลังหัวใจลอยๆ */
+        .floating-hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            background: var(--soft-white);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 40px 25px;
+            border-radius: 40px;
+            box-shadow: 0 15px 35px rgba(255, 105, 180, 0.2);
+            width: 85%;
+            max-width: 400px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .heart-main {
+            font-size: 50px;
+            animation: heartbeat 1.5s infinite;
+            margin-bottom: 10px;
+        }
+
+        /* สไตล์สำหรับรูปภาพแฟน */
+        .profile-wrap {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 20px;
+        }
+
+        .profile-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* ให้รูปไม่เบี้ยว */
+            border-radius: 50%; /* ทำเป็นวงกลม */
+            border: 4px solid #fff;
+            box-shadow: 0 5px 15px rgba(255, 105, 180, 0.4);
+            animation: heartbeat 1.5s infinite; /* ให้รูปเต้นตามจังหวะหัวใจได้ด้วย */
+        }
+
+        /* เพิ่มหัวใจดวงเล็กๆ แปะไว้ที่ขอบรูป (Option เสริมความหวาน) */
+        .profile-wrap::after {
+            content: '💗';
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            font-size: 25px;
+            background: white;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            14% { transform: scale(1.1); }
+            28% { transform: scale(1); }
+            42% { transform: scale(1.1); }
+            70% { transform: scale(1); }
+        }
+
+        h1 {
+            font-size: 20px;
+            color: #ff6b6b;
+            margin-bottom: 5px;
+            font-family: 'Prompt', sans-serif;
+            font-weight: 600;
+        }
+
+        .days-count {
+            font-size: 80px;
+            font-weight: 700;
+            background: -webkit-linear-gradient(45deg, #ff4f81, #ff7eb3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1;
+            margin: 10px 0;
+        }
+
+        .unit {
+            font-size: 18px;
+            color: #ff85a2;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 20px;
+        }
+
+        .info-grid {
+            display: grid;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .info-card {
+            background: white;
+            padding: 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+            transition: transform 0.3s ease;
+            border-left: 5px solid #ffb6c1;
+            text-align: left;
+        }
+
+        .info-card b {
+            color: #ff4f81;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .info-card span.date-text {
+            font-size: 15px;
+            color: #555;
+        }
+
+        .info-card .countdown {
+            float: right;
+            background: #fff0f3;
+            padding: 2px 10px;
+            border-radius: 12px;
+            color: #ff4f81;
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        .footer-text {
+            font-family: 'Prompt', sans-serif;
+            font-size: 12px;
+            color: #9e9e9e;
+            line-height: 1.6;
+            background: rgba(255, 255, 255, 0.5);
+            padding: 10px;
+            border-radius: 15px;
+        }
+
+        /* Mobile Optimization */
+        @media (max-width: 380px) {
+            .container { padding: 30px 15px; }
+            .days-count { font-size: 65px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="floating-hearts" id="heartPool"></div>
+
+    <div class="container">
+        <!-- เปลี่ยนจากอิโมจิเป็นรูปภาพ -->
+        <div class="profile-wrap" onclick="changeImage()">
+            <img src="./imgnoon/1.jpg" id="loverImg" alt="My Love" class="profile-img">
+        </div>
+
+        <h1>เป็นเเฟนกันมาแล้ว</h1>
+        <div class="days-count" id="daysTotal">0</div>
+        <span class="unit">Day</span>
+
+        <div class="info-grid">
+            <div class="info-card">
+                <span class="countdown" id="daysToMonth">0 วัน</span>
+                <b>📅 ครบรอบเดือนถัดไป</b>
+                <span class="date-text" id="nextMonth">...</span>
+            </div>
+
+            <div class="info-card">
+                <span class="countdown" id="daysToYear">0 วัน</span>
+                <b>🎂 ครบรอบปีถัดไป</b>
+                <span class="date-text" id="nextYear">...</span>
+            </div>
+        </div>
+
+        <div class="footer-text">
+            ✨ เริ่มคุยกัน: 2 ต.ค. 2568<br>
+            💍 เป็นแฟนกันเมื่อ: 30 ธ.ค. 2568
+        </div>
+    </div>
+
+    <script>
+        const anniversaryDate = new Date('2025-12-30'); 
+
+        function updateClock() {
+            const now = new Date();
+            
+            const diffTime = Math.abs(now - anniversaryDate);
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+            document.getElementById('daysTotal').innerText = diffDays;
+
+            // Monthly
+            let nextM = new Date(anniversaryDate);
+            let monthsToAdd = 1;
+            while (nextM <= now) {
+                nextM = new Date(anniversaryDate);
+                nextM.setMonth(anniversaryDate.getMonth() + monthsToAdd);
+                monthsToAdd++;
+            }
+            document.getElementById('nextMonth').innerText = nextM.toLocaleDateString('th-TH', { day:'numeric', month:'long', year:'numeric' });
+            document.getElementById('daysToMonth').innerText = Math.ceil((nextM - now) / (1000 * 60 * 60 * 24)) + " วัน";
+
+            // Yearly
+            let nextY = new Date(anniversaryDate);
+            let yearsToAdd = 1;
+            while (nextY <= now) {
+                nextY = new Date(anniversaryDate);
+                nextY.setFullYear(anniversaryDate.getFullYear() + yearsToAdd);
+                yearsToAdd++;
+            }
+            document.getElementById('nextYear').innerText = nextY.toLocaleDateString('th-TH', { day:'numeric', month:'long', year:'numeric' });
+            document.getElementById('daysToYear').innerText = Math.ceil((nextY - now) / (1000 * 60 * 60 * 24)) + " วัน";
+        }
+
+        // สร้างหัวใจลอยๆ
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.innerHTML = '❤️';
+            heart.style.position = 'fixed';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.top = '100vh';
+            heart.style.fontSize = (Math.random() * 10 + 10) + 'px';
+            heart.style.opacity = Math.random();
+            heart.style.transition = 'transform 5s linear, opacity 5s';
+            heart.style.zIndex = '0';
+            
+            document.getElementById('heartPool').appendChild(heart);
+
+            setTimeout(() => {
+                heart.style.transform = `translateY(-110vh) translateX(${Math.random() * 50 - 25}px)`;
+                heart.style.opacity = '0';
+            }, 100);
+
+            setTimeout(() => { heart.remove(); }, 6000);
+        }
+
+        setInterval(createHeart, 800);
+        updateClock();
+        setInterval(updateClock, 3600000);
+
+        let currentPhoto = 1;
+        function changeImage() {
+            currentPhoto++;
+            if (currentPhoto > 4) currentPhoto = 1; // ถ้าเกินรูปที่ 4 ให้กลับไป 1
+            
+            const imgElement = document.getElementById('loverImg');
+            imgElement.src = './imgnoon/' + currentPhoto + '.jpg';
+            
+            // เพิ่มลูกเล่นหัวใจกระจายตอนกด
+            for(let i=0; i<5; i++) {
+                setTimeout(createHeart, i * 100);
+            }
+        }
+    </script>
+</body>
+</html>

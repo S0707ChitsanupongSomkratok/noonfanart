@@ -191,9 +191,9 @@
             <img src="./imgnoon/1.jpg" id="loverImg" alt="My Love" class="profile-img">
         </div>
 
-        <h1>เป็นเเฟนกันมาแล้ว</h1>
+        <h1></h1>
         <div class="days-count" id="daysTotal">0</div>
-        <span class="unit">Day</span>
+        <span class="unit">Day กับเธอ</span>
 
         <div class="info-grid">
             <div class="info-card">
@@ -207,6 +207,22 @@
                 <b>🎂 ครบรอบปีถัดไป</b>
                 <span class="date-text" id="nextYear">...</span>
             </div>
+
+            <button 
+                id="notifyBtn"
+                style="
+                background:#ff6b9f;
+                border:none;
+                padding:12px 20px;
+                border-radius:20px;
+                color:white;
+                font-size:14px;
+                cursor:pointer;
+                margin-top:10px;
+                ">
+            💌 เปิดการแจ้งเตือน
+            </button>
+
         </div>
 
         <div class="footer-text">
@@ -288,5 +304,33 @@
             }
         }
     </script>
+
+    <script>
+        if ('serviceWorker' in navigator && 'PushManager' in window) {
+        document.getElementById("notifyBtn").onclick = async () => {
+
+            const permission = await Notification.requestPermission();
+            if (permission !== 'granted') {
+            alert("ต้องอนุญาตการแจ้งเตือนก่อนนะ 😢");
+            return;
+            }
+
+            const reg = await navigator.serviceWorker.register('/sw.js');
+            const sub = await reg.pushManager.subscribe({
+            userVisibleOnly: true,
+            applicationServerKey: 'ใส่_PUBLIC_VAPID_KEY_ตรงนี้'
+            });
+
+            await fetch('/subscribe', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(sub)
+            });
+
+            alert("เปิดการแจ้งเตือนเรียบร้อย 💖");
+        };
+        }
+    </script>
+
 </body>
 </html>
